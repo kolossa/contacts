@@ -2,7 +2,9 @@
 
 namespace delocal\Contacts\Controllers;
 
-class TestController{
+use delocal\Contacts\App\BaseController;
+
+class TestController extends BaseController {
 	
 	public function actionIndex($id){
 		
