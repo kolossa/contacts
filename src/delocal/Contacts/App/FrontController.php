@@ -5,6 +5,9 @@ namespace delocal\Contacts\App;
 class FrontController{
 	
 	protected $routes;
+	protected $controllerClassName;
+	protected $controllerActionMethodName;
+	protected $params;
 	
 	public function __construct($routes){
 		
@@ -15,9 +18,11 @@ class FrontController{
 		
 		$urlInParts=explode('/', $url);
 		$filteredUrlInParts=array_filter($urlInParts);
+		$isRouteMatchWithUrl=true;
 		
 		foreach($this->routes as $route=>$values){
 			
+			$params=[];
 			$routeInParts=explode('/', $route);
 			$filteredRouteInParts=array_filter($routeInParts);
 			
@@ -30,16 +35,15 @@ class FrontController{
 				$partRoute=current($filteredRouteInParts);
 				$partUrl=current($filteredUrlInParts);
 				
-				
 				if(stripos($partRoute, '{')!==false){
 					
-					continue;
-				}
-				
-				if($partRoute!=$partUrl){
-					$isRouteMatchWithUrl=false;
-					break;
-				}
+					$params[]=$partUrl;
+				}else{
+					if($partRoute!=$partUrl){
+						$isRouteMatchWithUrl=false;
+						break;
+					}
+				}				
 				
 				prev($filteredRouteInParts);
 				prev($filteredUrlInParts);
@@ -47,10 +51,22 @@ class FrontController{
 			
 			if($isRouteMatchWithUrl){
 				
-				return $values;
+				$this->controllerClassName=$values['controller'];
+				$this->controllerActionMethodName=$values['action'];
+				$this->params=$params;
+				break;
 			}
+		}
+		
+		if(!$isRouteMatchWithUrl){
+			
+			throw new \Exception('Controller not found!', 404);
 		}
 	}
 	
-	public function run() {}
+	public function run(string $url) {
+		
+		$this->findControllerByUrl($url);
+		call_user_func_array([new $this->controllerClassName, $this->controllerActionMethodName], $this->params);
+	}
 }
