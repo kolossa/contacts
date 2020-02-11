@@ -14,54 +14,53 @@ class FrontController{
 		$this->routes=$routes;
 	}
 	
-	public function findControllerByUrl(string $url) {
+	protected function findControllerByUrl(string $url): void {
 		
 		$urlInParts=explode('/', $url);
 		$filteredUrlInParts=array_filter($urlInParts);
-		$isRouteMatchWithUrl=true;
 		
-		foreach($this->routes as $route=>$values){
+		
+		foreach($this->routes as $route=>$routingValues){
 			
-			$params=[];
-			$routeInParts=explode('/', $route);
-			$filteredRouteInParts=array_filter($routeInParts);
-			
-			$isRouteMatchWithUrl=true;
-			end($filteredRouteInParts);
-			end($filteredUrlInParts);
-			
-			for($i=0;$i<count($filteredRouteInParts);$i++){
-				
-				$partRoute=current($filteredRouteInParts);
-				$partUrl=current($filteredUrlInParts);
-				
-				if(stripos($partRoute, '{')!==false){
-					
-					$params[]=$partUrl;
-				}else{
-					if($partRoute!=$partUrl){
-						$isRouteMatchWithUrl=false;
-						break;
-					}
-				}				
-				
-				prev($filteredRouteInParts);
-				prev($filteredUrlInParts);
-			}
-			
-			if($isRouteMatchWithUrl){
-				
-				$this->controllerClassName=$values['controller'];
-				$this->controllerActionMethodName=$values['action'];
-				$this->params=$params;
-				break;
+			if($this->setControllerByRoute($route, $routingValues, $filteredUrlInParts)){
+				return;
 			}
 		}
 		
-		if(!$isRouteMatchWithUrl){
+		throw new \Exception('Controller not found!', 404);
+	}
+	
+	protected function setControllerByRoute($route, $routingValues, $filteredUrlInParts): bool {
+		
+		$params=[];
+		$routeInParts=explode('/', $route);
+		$filteredRouteInParts=array_filter($routeInParts);
+		
+		end($filteredRouteInParts);
+		end($filteredUrlInParts);
+		
+		for($i=0;$i<count($filteredRouteInParts);$i++){
 			
-			throw new \Exception('Controller not found!', 404);
+			$partRoute=current($filteredRouteInParts);
+			$partUrl=current($filteredUrlInParts);
+			
+			if(stripos($partRoute, '{')!==false){
+				
+				$params[]=$partUrl;
+			}else{
+				if($partRoute!=$partUrl){
+					return false;
+				}
+			}				
+			
+			prev($filteredRouteInParts);
+			prev($filteredUrlInParts);
 		}
+		
+		$this->controllerClassName=$routingValues['controller'];
+		$this->controllerActionMethodName=$routingValues['action'];
+		$this->params=$params;
+		return true;
 	}
 	
 	public function run(string $url) {
