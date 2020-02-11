@@ -8,10 +8,16 @@ class FrontController{
 	protected $controllerClassName;
 	protected $controllerActionMethodName;
 	protected $params;
+
+    /**
+     * @var Request $request
+     */
+	protected $request;
 	
 	public function __construct($routes){
 		
 		$this->routes=$routes;
+		$this->request=new Request($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
 	}
 	
 	protected function findControllerByUrl(string $url): void {
@@ -66,6 +72,8 @@ class FrontController{
 	public function run(string $url) {
 		
 		$this->findControllerByUrl($url);
-		call_user_func_array([new $this->controllerClassName, $this->controllerActionMethodName], $this->params);
+
+		$controller=new $this->controllerClassName($this->request);
+		call_user_func_array([$controller, $this->controllerActionMethodName], $this->params);
 	}
 }
