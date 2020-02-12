@@ -12,7 +12,7 @@ class ContactsController extends BaseController
     public function actionIndex()
     {
         if (!$this->request->isGetRequest()) {
-            throw new \Exception('Page not found!', 404);
+            throw new \Exception('This method is not supported for this route. Supported methods: GET.', 404);
         }
 
         $contactGateway = new ContactGateway();

@@ -14,7 +14,7 @@ class CreateContactController extends BaseController
     {
 
         if (!$this->request->isPutRequest()) {
-            throw new \Exception('Page not found!', 404);
+            throw new \Exception('This method is not supported for this route. Supported methods: PUT.', 404);
         }
 
         $name = $this->request->getPut('name');
