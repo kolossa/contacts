@@ -35,4 +35,24 @@ class Request
         }
         return null;
     }
+
+    public function getPut($name)
+	{
+    	if($this->isPutRequest()){
+
+    		$result=array();
+			$rawBody = file_get_contents('php://input');
+
+			if (strncmp($this->getContentType(), 'application/json', 16) === 0){
+				$result = json_decode($rawBody);
+				$result = (array)$result;
+			}else{
+				mb_parse_str($rawBody, $result);
+			}
+
+			if(isset($result[$name])){
+				return $result[$name];
+			}
+		}
+	}
 }
