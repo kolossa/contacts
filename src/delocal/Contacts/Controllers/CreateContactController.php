@@ -45,15 +45,7 @@ class CreateContactController extends BaseController
 
         } else {
 
-            if ($storedContactDto->getName() != $dto->getName() ||
-                $storedContactDto->getAddress() != $dto->getAddress() ||
-                $storedContactDto->getPhoneNumber() != $dto->getPhoneNumber()
-            ) {
-                $contactGateway->update($dto);
-                http_response_code(200);
-            } else {
-                http_response_code(204);
-            }
+            http_response_code(204);
         }
     }
 }
