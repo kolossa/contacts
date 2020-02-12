@@ -30,7 +30,7 @@ class ModifyContactController extends BaseController
 
         $contactGateway = new ContactGateway();
 
-        $storedContactDto = $contactGateway->findByPk($oldEmail);
+        $storedContactDto = $contactGateway->findByEmail($oldEmail);
 
         if($storedContactDto==null){
 
