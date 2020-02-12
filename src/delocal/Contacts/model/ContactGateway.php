@@ -30,11 +30,11 @@ class ContactGateway extends TableDataGateway
         return new ContactGatewayDTO($result['name'], $result['email'], $result['phone_number'], $result['address']);
     }
 
-    public function update(ContactGatewayDTO $dto): bool
+    public function changeEmail(string $oldEmail, string $newEmail): bool
     {
 
-        $sql = "UPDATE $this->tableName SET name=?, phone_number=?, address=? WHERE email=?";
+        $sql = "UPDATE $this->tableName SET email=? WHERE email=?";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([$dto->getName(), $dto->getPhoneNumber(), $dto->getAddress(), $dto->getEmail()]);
+        return $stmt->execute([$newEmail, $oldEmail]);
     }
 }
