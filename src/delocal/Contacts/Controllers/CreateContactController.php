@@ -10,9 +10,10 @@ use delocal\Contacts\model\ContactGatewayDTO;
 
 class CreateContactController extends BaseController
 {
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
-        if(!$this->request->isPutRequest()){
+        if (!$this->request->isPutRequest()) {
             throw new \Exception('Page not found!', 404);
         }
 
@@ -21,10 +22,38 @@ class CreateContactController extends BaseController
         $phoneNumber = $this->request->getPut('phoneNumber');
         $address = $this->request->getPut('address');
 
+        if ($name == '' ||
+            $email == '' ||
+            $phoneNumber == '' ||
+            $address == ''
+        ) {
+            http_response_code(400);
+
+            return;
+        }
+
         $dto = new ContactGatewayDTO($name, $email, $phoneNumber, $address);
 
         $contactGateway = new ContactGateway();
-        $contactGateway->insert($dto);
 
+        $storedContactDto = $contactGateway->findByPk($dto->getEmail());
+
+        if ($storedContactDto == null) {
+
+            $contactGateway->insert($dto);
+            http_response_code(201);
+
+        } else {
+
+            if ($storedContactDto->getName() != $dto->getName() ||
+                $storedContactDto->getAddress() != $dto->getAddress() ||
+                $storedContactDto->getPhoneNumber() != $dto->getPhoneNumber()
+            ) {
+                $contactGateway->update($dto);
+                http_response_code(200);
+            } else {
+                http_response_code(204);
+            }
+        }
     }
 }
