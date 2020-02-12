@@ -18,7 +18,7 @@ class ContactGatewayDTO
      * @param $phoneNumber
      * @param $address
      */
-    public function __construct($name, $email, $phoneNumber, $address)
+    public function __construct(string $name, string  $email, string $phoneNumber, string $address)
     {
         $this->name = $name;
         $this->email = $email;
@@ -29,7 +29,7 @@ class ContactGatewayDTO
     /**
      * @return mixed
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -37,7 +37,7 @@ class ContactGatewayDTO
     /**
      * @return mixed
      */
-    public function getEmail()
+    public function getEmail() : string
     {
         return $this->email;
     }
@@ -45,7 +45,7 @@ class ContactGatewayDTO
     /**
      * @return mixed
      */
-    public function getPhoneNumber()
+    public function getPhoneNumber() : string
     {
         return $this->phoneNumber;
     }
@@ -53,7 +53,7 @@ class ContactGatewayDTO
     /**
      * @return mixed
      */
-    public function getAddress()
+    public function getAddress() : string
     {
         return $this->address;
     }
