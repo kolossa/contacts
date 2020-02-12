@@ -15,7 +15,7 @@ class ContactGateway extends TableDataGateway
         return $stmt->execute([$dto->getName(), $dto->getEmail(), $dto->getPhoneNumber(), $dto->getAddress()]);
     }
 
-    public function findByPk(string $email): ?ContactGatewayDTO
+    public function findByEmail(string $email): ?ContactGatewayDTO
     {
         $sql = "SELECT * FROM $this->tableName WHERE email=?";
         $stmt = $this->pdo->prepare($sql);
@@ -28,6 +28,21 @@ class ContactGateway extends TableDataGateway
         }
 
         return new ContactGatewayDTO($result['name'], $result['email'], $result['phone_number'], $result['address']);
+    }
+
+    public function findByPk(int $id): ?ContactGatewayDTO
+    {
+        $sql = "SELECT * FROM $this->tableName WHERE id=?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($result == false) {
+            return null;
+        }
+
+        return new ContactGatewayDTO($result['id'], $result['name'], $result['email'], $result['phone_number'], $result['address']);
     }
 
     public function changeEmail(string $oldEmail, string $newEmail): bool
