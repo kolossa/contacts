@@ -6,7 +6,7 @@ namespace delocal\Contacts\model;
 
 class ContactGateway extends TableDataGateway
 {
-	protected $tableName='contacts';
+    protected $tableName = 'contacts';
 
     public function insert(ContactGatewayDTO $dto): bool
     {
@@ -16,17 +16,25 @@ class ContactGateway extends TableDataGateway
     }
 
     public function findByPk(string $email): ?ContactGatewayDTO
-	{
-		$sql = "SELECT * FROM $this->tableName WHERE email=?";
-		$stmt = $this->pdo->prepare($sql);
-		$stmt->execute([$email]);
+    {
+        $sql = "SELECT * FROM $this->tableName WHERE email=?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$email]);
 
-		$result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-		if($result==false){
-			return null;
-		}
+        if ($result == false) {
+            return null;
+        }
 
-		return new ContactGatewayDTO($result['name'], $result['email'], $result['phone_number'], $result['address']);
-	}
+        return new ContactGatewayDTO($result['name'], $result['email'], $result['phone_number'], $result['address']);
+    }
+
+    public function update(ContactGatewayDTO $dto): bool
+    {
+
+        $sql = "UPDATE $this->tableName SET name=?, phone_number=?, address=? WHERE email=?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$dto->getName(), $dto->getPhoneNumber(), $dto->getAddress(), $dto->getEmail()]);
+    }
 }
