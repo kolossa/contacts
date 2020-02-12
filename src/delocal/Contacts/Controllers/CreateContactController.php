@@ -33,11 +33,11 @@ class CreateContactController extends BaseController
             return;
         }
 
-        $dto = new ContactGatewayDTO($name, $email, $phoneNumber, $address);
+        $dto = new ContactGatewayDTO(null, $name, $email, $phoneNumber, $address);
 
         $contactGateway = new ContactGateway();
 
-        $storedContactDto = $contactGateway->findByPk($dto->getEmail());
+        $storedContactDto = $contactGateway->findByEmail($dto->getEmail());
 
         if ($storedContactDto == null) {
 
