@@ -5,6 +5,8 @@ namespace delocal\Contacts\Controllers;
 
 
 use delocal\Contacts\App\BaseController;
+use delocal\Contacts\model\ContactGateway;
+use delocal\Contacts\model\ContactGatewayDTO;
 
 class CreateContactController extends BaseController
 {
@@ -14,11 +16,15 @@ class CreateContactController extends BaseController
             throw new \Exception('Page not found!', 404);
         }
 
-        if (strncmp($this->request->getContentType(), 'application/json', 16) === 0){
-            $rawBody=file_get_contents('php://input');
-            $result = json_decode($rawBody);
-            var_dump($result);
-        }
+        $name = $this->request->getPut('name');
+        $email = $this->request->getPut('email');
+        $phoneNumber = $this->request->getPut('phoneNumber');
+        $address = $this->request->getPut('address');
+
+        $dto = new ContactGatewayDTO($name, $email, $phoneNumber, $address);
+
+        $contactGateway = new ContactGateway();
+        $contactGateway->insert($dto);
 
     }
 }
