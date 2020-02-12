@@ -15,11 +15,11 @@ class ContactGateway extends TableDataGateway
         return $stmt->execute([$dto->getName(), $dto->getEmail(), $dto->getPhoneNumber(), $dto->getAddress()]);
     }
 
-    public function findByPk(ContactGatewayDTO $dto): ?ContactGatewayDTO
+    public function findByPk(string $email): ?ContactGatewayDTO
 	{
 		$sql = "SELECT * FROM $this->tableName WHERE email=?";
 		$stmt = $this->pdo->prepare($sql);
-		$stmt->execute([$dto->getEmail()]);
+		$stmt->execute([$email]);
 
 		$result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
