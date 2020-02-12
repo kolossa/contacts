@@ -15,18 +15,18 @@ class ContactGateway extends TableDataGateway
         return $stmt->execute([$dto->getName(), $dto->getEmail(), $dto->getPhoneNumber(), $dto->getAddress()]);
     }
 
-    public function exists(ContactGatewayDTO $dto): bool
+    public function findByPk(ContactGatewayDTO $dto): ?ContactGatewayDTO
 	{
-		$sql = "SELECT * FROM $this->tableName WHERE name=? COLLATE utf8_bin AND email=? AND phone_number=? AND address=? COLLATE utf8_bin LIMIT 1";
+		$sql = "SELECT * FROM $this->tableName WHERE email=?";
 		$stmt = $this->pdo->prepare($sql);
-		$stmt->execute([$dto->getName(), $dto->getEmail(), $dto->getPhoneNumber(), $dto->getAddress()]);
+		$stmt->execute([$dto->getEmail()]);
 
 		$result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
 		if($result==false){
-			return false;
+			return null;
 		}
 
-		return true;
+		return new ContactGatewayDTO($result['name'], $result['email'], $result['phone_number'], $result['address']);
 	}
 }
