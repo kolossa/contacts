@@ -24,10 +24,11 @@ class CreateContactController extends BaseController
 
         if ($name == '' ||
             $email == '' ||
+            !filter_var($email, FILTER_VALIDATE_EMAIL) ||
             $phoneNumber == '' ||
             $address == ''
         ) {
-            http_response_code(400);
+            throw new \Exception('Missing data!', 400);
 
             return;
         }
