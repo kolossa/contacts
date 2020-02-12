@@ -52,4 +52,29 @@ class ContactGateway extends TableDataGateway
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$newEmail, $oldEmail]);
     }
+
+    /**
+     * @return ContactGatewayDTO[]
+     */
+    public function findAll(): array
+    {
+        $result = [];
+
+        $sql = "SELECT * FROM $this->tableName";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        $queryResult = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if ($queryResult != false) {
+
+            foreach ($queryResult as $item) {
+
+                $dto = new ContactGatewayDTO($item['id'], $item['name'], $item['email'], $item['phone_number'], $item['address']);
+                $result[] = $dto;
+            }
+        }
+
+        return $result;
+    }
 }
