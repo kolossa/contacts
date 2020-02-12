@@ -10,7 +10,6 @@
  * a controller class.
  */
 return [
-    'test/{id}' => ['controller' => 'delocal\Contacts\Controllers\TestController', 'action' => 'actionIndex'],
     'contacts/create' => ['controller' => 'delocal\Contacts\Controllers\CreateContactController', 'action' => 'actionIndex'],
     'contacts/modify' => ['controller' => 'delocal\Contacts\Controllers\ModifyContactController', 'action' => 'actionIndex'],
     'contact/{id}' => ['controller' => 'delocal\Contacts\Controllers\ContactController', 'action' => 'actionIndex'],
