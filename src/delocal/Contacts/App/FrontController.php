@@ -81,7 +81,8 @@ class FrontController
             call_user_func_array([$controller, $this->controllerActionMethodName], $this->params);
 
         } catch (\Exception $e) {
-            echo 'code: ' . $e->getCode() . PHP_EOL . ' message: ' . $e->getMessage();
+			http_response_code($e->getCode());
+        	echo 'code: ' . $e->getCode() . PHP_EOL . ' message: ' . $e->getMessage();
         }
 
     }
