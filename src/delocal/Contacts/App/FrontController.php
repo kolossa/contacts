@@ -36,7 +36,7 @@ class FrontController
             }
         }
 
-        throw new \Exception('Controller not found!', 404);
+        throw new HttpException(404, 'Controller not found!');
     }
 
     protected function setControllerByRoute($route, $routingValues, $filteredUrlInParts): bool
@@ -80,10 +80,12 @@ class FrontController
             $controller = new $this->controllerClassName($this->request);
             call_user_func_array([$controller, $this->controllerActionMethodName], $this->params);
 
-        } catch (\Exception $e) {
-			http_response_code($e->getCode());
+        } catch (HttpException $e) {
+			http_response_code($e->getStatusCode());
         	echo 'code: ' . $e->getCode() . PHP_EOL . ' message: ' . $e->getMessage();
-        }
+        } catch (\Exception $e){
+			echo 'code: ' . $e->getCode() . PHP_EOL . ' message: ' . $e->getMessage();
+		}
 
     }
 }
