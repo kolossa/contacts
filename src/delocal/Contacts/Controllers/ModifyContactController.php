@@ -5,6 +5,7 @@ namespace delocal\Contacts\Controllers;
 
 
 use delocal\Contacts\App\BaseController;
+use delocal\Contacts\App\HttpException;
 use delocal\Contacts\model\ContactGateway;
 
 class ModifyContactController extends BaseController
@@ -12,7 +13,7 @@ class ModifyContactController extends BaseController
     public function actionIndex()
     {
         if (!$this->request->isPutRequest()) {
-            throw new \Exception('This method is not supported for this route. Supported methods: PUT.', 404);
+            throw new HttpException(404, 'This method is not supported for this route. Supported methods: PUT.');
         }
 
         $oldEmail = $this->request->getPut('old_email');
@@ -23,7 +24,7 @@ class ModifyContactController extends BaseController
             !filter_var($oldEmail, FILTER_VALIDATE_EMAIL) ||
             !filter_var($newEmail, FILTER_VALIDATE_EMAIL)
         ) {
-            throw new \Exception('Missing data!', 400);
+            throw new HttpException(400, 'Missing data!');
 
             return;
         }
@@ -34,7 +35,7 @@ class ModifyContactController extends BaseController
 
         if($storedContactDto==null){
 
-            throw new \Exception('Contact not found by email: '.$oldEmail, 404);
+            throw new HttpException(404, 'Contact not found by email: '.$oldEmail);
         }
 
         $result=$contactGateway->changeEmail($oldEmail, $newEmail);

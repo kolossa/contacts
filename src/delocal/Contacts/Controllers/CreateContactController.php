@@ -5,6 +5,7 @@ namespace delocal\Contacts\Controllers;
 
 
 use delocal\Contacts\App\BaseController;
+use delocal\Contacts\App\HttpException;
 use delocal\Contacts\model\ContactGateway;
 use delocal\Contacts\model\ContactGatewayDTO;
 
@@ -14,7 +15,7 @@ class CreateContactController extends BaseController
     {
 
         if (!$this->request->isPutRequest()) {
-            throw new \Exception('This method is not supported for this route. Supported methods: PUT.', 404);
+            throw new HttpException(404, 'This method is not supported for this route. Supported methods: PUT.');
         }
 
         $name = $this->request->getPut('name');
@@ -28,7 +29,7 @@ class CreateContactController extends BaseController
             $phoneNumber == '' ||
             $address == ''
         ) {
-            throw new \Exception('Missing data!', 400);
+            throw new HttpException(400, 'Missing data!');
 
             return;
         }

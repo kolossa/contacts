@@ -5,6 +5,7 @@ namespace delocal\Contacts\Controllers;
 
 
 use delocal\Contacts\App\BaseController;
+use delocal\Contacts\App\HttpException;
 use delocal\Contacts\model\ContactGateway;
 
 class ContactController extends BaseController
@@ -12,7 +13,7 @@ class ContactController extends BaseController
     public function actionIndex($id)
     {
         if (!$this->request->isGetRequest()) {
-            throw new \Exception('This method is not supported for this route. Supported methods: GET. ', 404);
+            throw new HttpException(404, 'This method is not supported for this route. Supported methods: GET. ');
         }
 
 
@@ -20,7 +21,7 @@ class ContactController extends BaseController
         $dto = $contactGateway->findByPk($id);
 
         if ($dto == null) {
-            throw new \Exception('Contact not found!', 404);
+            throw new HttpException(404, 'Contact not found!');
         }
 
         header('Content-Type: application/json');
