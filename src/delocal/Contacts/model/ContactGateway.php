@@ -27,7 +27,7 @@ class ContactGateway extends TableDataGateway
             return null;
         }
 
-        return new ContactGatewayDTO($result['name'], $result['email'], $result['phone_number'], $result['address']);
+        return new ContactGatewayDTO($result['id'], $result['name'], $result['email'], $result['phone_number'], $result['address']);
     }
 
     public function findByPk(int $id): ?ContactGatewayDTO
