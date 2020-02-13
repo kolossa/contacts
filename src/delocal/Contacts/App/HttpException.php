@@ -21,7 +21,7 @@ class HttpException extends \Exception
 	/**
 	 * @return int
 	 */
-	public function getStatusCode()
+	public function getStatusCode() : int
 	{
 		return $this->statusCode;
 	}
