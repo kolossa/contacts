@@ -16,4 +16,14 @@ class HttpException extends \Exception
 		$this->statusCode = $statusCode;
 		parent::__construct($message, $code, $previous);
 	}
+
+
+	/**
+	 * @return int
+	 */
+	public function getStatusCode()
+	{
+		return $this->statusCode;
+	}
+
 }
