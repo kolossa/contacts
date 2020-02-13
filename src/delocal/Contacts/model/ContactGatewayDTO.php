@@ -20,7 +20,7 @@ class ContactGatewayDTO
      * @param string $phoneNumber
      * @param string $address
      */
-    public function __construct($id, string $name, string $email, string $phoneNumber, string $address)
+    public function __construct(?int $id, string $name, string $email, string $phoneNumber, string $address)
     {
         $this->id = $id;
         $this->name = $name;
